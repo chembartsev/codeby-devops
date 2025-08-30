@@ -1,0 +1,29 @@
+Script started on 2025-08-24 22:42:38+03:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="120" LINES="32"]
+[?2004h]0;vboxuser@newlinuxtestname: ~/Downloads[01;32mvboxuser@newlinuxtestname[00m:[01;34m~/Downloads[00m$ [7msudo systemctl status nginx-custom[27msudo systemctl status nginx-custom
+[?2004l[sudo] password for vboxuser: 
+[?1h=[0;1;32m●[0m nginx-custom.service - Custom Nginx Service[m
+     Loaded: loaded (]8;;file://newlinuxtestname/etc/systemd/system/nginx-custom.service/etc/systemd/system/nginx-custom.service]8;;; [0;1;32menabled[0m; preset: [0;1;32menabled[0m)[m
+     Active: [0;1;32mactive (running)[0m since Sun 2025-08-24 22:39:50 MSK; 6min ago[m
+    Process: 11805 ExecStartPre=/usr/sbin/nginx -t (code=exited, status=0/SUCCESS)[m
+    Process: 11806 ExecStart=/usr/sbin/nginx (code=exited, status=0/SUCCESS)[m
+   Main PID: 11808 (nginx)[m
+      Tasks: 5 (limit: 4603)[m
+     Memory: 3.7M (peak: 4.0M)[m
+        CPU: 17ms[m
+     CGroup: /system.slice/nginx-custom.service[m
+             ├─[0;38;5;245m11808 "nginx: master process /usr/sbin/nginx"[0m[m
+             ├─[0;38;5;245m11809 "nginx: worker process"[0m[m
+             ├─[0;38;5;245m11810 "nginx: worker process"[0m[m
+             ├─[0;38;5;245m11811 "nginx: worker process"[0m[m
+             └─[0;38;5;245m11812 "nginx: worker process"[0m[m
+[m
+Aug 24 22:39:50 newlinuxtestname systemd[1]: Starting nginx-custom.service - Custom Nginx Service...[m
+Aug 24 22:39:50 newlinuxtestname nginx[11805]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok[m
+Aug 24 22:39:50 newlinuxtestname nginx[11805]: nginx: configuration file /etc/nginx/nginx.conf test is successful[m
+Aug 24 22:39:50 newlinuxtestname systemd[1]: Started nginx-custom.service - Custom Nginx Service.[m
+[K[?1l>[?2004h]0;vboxuser@newlinuxtestname: ~/Downloads[01;32mvboxuser@newlinuxtestname[00m:[01;34m~/Downloads[00m$ sudo systemctl is-enabled nginx-custom
+[?2004lenabled
+[?2004h]0;vboxuser@newlinuxtestname: ~/Downloads[01;32mvboxuser@newlinuxtestname[00m:[01;34m~/Downloads[00m$ exit
+[?2004lexit
+
+Script done on 2025-08-24 22:48:18+03:00 [COMMAND_EXIT_CODE="0"]
