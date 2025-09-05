@@ -1,0 +1,39 @@
+Script started on 2025-09-06 00:32:56+03:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="99" LINES="25"]
+[?2004h]0;vboxuser@newlinuxtestname: ~[01;32mvboxuser@newlinuxtestname[00m:[01;34m~[00m$ history| grep script[3Pscript ps-log.txtexit[Kscript ps-log.txthistory| grep script[Khistory| grep script[3Pscript ps-log.txtexit[Kkillall top[6Ptop &ps uxauxsudo lxc config device add apache-container http proxy listen=tcp:0.0.0.0:8080 connect=tcp:127.0.0.1:80[Alxc config device add apache-container http proxy listen=tcp:0.0.0.0:80[5P[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[A]0;vboxuser@newlinuxtestname: ~[01;32mvboxuser@newlinuxtestname[00m:[01;34m~[00m$ sudo lxc config device add apache-container http proxy listen=tcp:0.0.0[5@.0:80[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Aps aux[K
+[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Csudo lxc config device add apache-container http proxy listen=tcp:0.0.0.0:8080 connect=tcp:127.0.0.1:80[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K
+[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[Ksudo lxc list
+[?2004l[sudo] password for vboxuser: 
++------------------+---------+-----------------------+-----------------------------------------------+-----------+-----------+
+|       NAME       |  STATE  |         IPV4          |                     IPV6                      |   TYPE    | SNAPSHOTS |
++------------------+---------+-----------------------+-----------------------------------------------+-----------+-----------+
+| apache-container | RUNNING | 10.153.176.158 (eth0) | fd42:33f9:dc43:83ef:216:3eff:fe9a:be50 (eth0) | CONTAINER | 0         |
++------------------+---------+-----------------------+-----------------------------------------------+-----------+-----------+
+| humorous-penguin | RUNNING | 10.153.176.168 (eth0) | fd42:33f9:dc43:83ef:216:3eff:fee9:f48e (eth0) | CONTAINER | 0         |
++------------------+---------+-----------------------+-----------------------------------------------+-----------+-----------+
+[?2004h]0;vboxuser@newlinuxtestname: ~[01;32mvboxuser@newlinuxtestname[00m:[01;34m~[00m$ [7msudo lxc exec apache-container -- /bin/bash[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Csudo lxc exec apache-container -- /bin/bash
+[?2004l[?2004h]0;root@apache-container: ~root@apache-container:~# systemctl status apache2
+[?2004l[?1h=[0;1;32m●[0m apache2.service - The Apache HTTP Server[m
+     Loaded: loaded (]8;;file://apache-container/usr/lib/systemd/system/apache2.service/usr/lib/systemd/system/apache2.service]8;;; [0;1;32menabled[0m; preset: [0;1;32menabled[0m)[m
+     Active: [0;1;32mactive (running)[0m since Fri 2025-09-05 19:44:58 UTC; 1h 49min ago[m
+       Docs: ]8;;https://httpd.apache.org/docs/2.4/https://httpd.apache.org/docs/2.4/]8;;[m
+    Process: 337 ExecStart=/usr/sbin/apachectl start (code=exited, status=0/SUCCESS)[m
+    Process: 498 ExecReload=/usr/sbin/apachectl graceful (code=exited, status=0/SUCCESS)[m
+   Main PID: 404 (apache2)[m
+      Tasks: 55 (limit: 4603)[m
+     Memory: 8.3M (peak: 10.3M)[m
+        CPU: 766ms[m
+     CGroup: /system.slice/apache2.service[m
+             ├─[0;38;5;245m404 /usr/sbin/apache2 -k start[0m[m
+             ├─[0;38;5;245m521 /usr/sbin/apache2 -k start[0m[m
+             └─[0;38;5;245m522 /usr/sbin/apache2 -k start[0m[m
+[m
+Sep 05 19:44:58 apache-container systemd[1]: Starting apache2.service - The Apache HTTP Server...[m
+Sep 05 19:44:58 apache-container systemd[1]: Started apache2.service - The Apache HTTP Server.[m
+Sep 05 19:44:59 apache-container systemd[1]: Reloading apache2.service - The Apache HTTP Server...[m
+Sep 05 19:44:59 apache-container systemd[1]: Reloaded apache2.service - The Apache HTTP Server.[m
+[K[?1l>[?2004h]0;root@apache-container: ~root@apache-container:~# exit
+[?2004lexit
+[?2004h]0;vboxuser@newlinuxtestname: ~[01;32mvboxuser@newlinuxtestname[00m:[01;34m~[00m$ exit
+[?2004lexit
+
+Script done on 2025-09-06 00:34:32+03:00 [COMMAND_EXIT_CODE="0"]
