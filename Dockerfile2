@@ -1,0 +1,41 @@
+# Базовый образ
+FROM debian:11
+ENV DEBIAN_FRONTEND=noninteractive
+# Создаем директорию для веб-контента
+RUN mkdir -p /opt/www
+
+# Обновление системы и установка nginx
+RUN apt-get update && \
+apt-get install -y nginx && \
+rm -rf /var/lib/apt/lists/*
+
+# Создание файла index.html
+RUN echo "<!DOCTYPE html>" > /opt/www/index.html && \
+    echo "<html>" >> /opt/www/index.html && \
+    echo "<head><title>Hello from Docker2222!</title></head>" >> /opt/www/index.html && \
+    echo "<body>" >> /opt/www/index.html && \
+    echo "<h1>Welcome to Nginx in Docker!</h1>" >> /opt/www/index.html && \
+    echo "<p>This is running on debian 11</p>" >> /opt/www/index.html && \
+    echo "</body>" >> /opt/www/index.html && \
+    echo "</html>" >> /opt/www/index.html
+
+# Создание конфига nginx
+RUN echo "events {" > /etc/nginx/nginx.conf && \
+    echo "    worker_connections 1024;" >> /etc/nginx/nginx.conf && \
+    echo "}" >> /etc/nginx/nginx.conf && \
+    echo "http {" >> /etc/nginx/nginx.conf && \
+    echo "    server {" >> /etc/nginx/nginx.conf && \
+    echo "        listen 80;" >> /etc/nginx/nginx.conf && \
+    echo "        server_name localhost;" >> /etc/nginx/nginx.conf && \
+    echo "        location / {" >> /etc/nginx/nginx.conf && \
+    echo "            root /opt/www;" >> /etc/nginx/nginx.conf && \
+    echo "            index index.html;" >> /etc/nginx/nginx.conf && \
+    echo "        }" >> /etc/nginx/nginx.conf && \
+    echo "    }" >> /etc/nginx/nginx.conf && \
+    echo "}" >> /etc/nginx/nginx.conf
+
+# Открытие порта 80 для nginx
+EXPOSE 80
+
+# Запуск через Entrypoint
+ENTRYPOINT ["nginx", "-g", "daemon off;"]

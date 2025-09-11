@@ -1,0 +1,40 @@
+# Базовый образ
+FROM alpine:latest
+
+# Установка nginx и очистка кеша
+RUN apk add --no-cache nginx && \
+    # Создание папки для сайта
+    mkdir -p /opt/www && \
+    # Создание папки для логов nginx
+    mkdir -p /var/log/nginx
+
+# Создание файла index.html
+RUN echo "<!DOCTYPE html>" > /opt/www/index.html && \
+    echo "<html>" >> /opt/www/index.html && \
+    echo "<head><title>Hello from Docker!</title></head>" >> /opt/www/index.html && \
+    echo "<body>" >> /opt/www/index.html && \
+    echo "<h1>Welcome to Nginx in Docker!</h1>" >> /opt/www/index.html && \
+    echo "<p>This is running on Alpine Linux</p>" >> /opt/www/index.html && \
+    echo "</body>" >> /opt/www/index.html && \
+    echo "</html>" >> /opt/www/index.html
+
+# Создание конфига nginx
+RUN echo "events {" > /etc/nginx/nginx.conf && \
+    echo "    worker_connections 1024;" >> /etc/nginx/nginx.conf && \
+    echo "}" >> /etc/nginx/nginx.conf && \
+    echo "http {" >> /etc/nginx/nginx.conf && \
+    echo "    server {" >> /etc/nginx/nginx.conf && \
+    echo "        listen 80;" >> /etc/nginx/nginx.conf && \
+    echo "        server_name localhost;" >> /etc/nginx/nginx.conf && \
+    echo "        location / {" >> /etc/nginx/nginx.conf && \
+    echo "            root /opt/www;" >> /etc/nginx/nginx.conf && \
+    echo "            index index.html;" >> /etc/nginx/nginx.conf && \
+    echo "        }" >> /etc/nginx/nginx.conf && \
+    echo "    }" >> /etc/nginx/nginx.conf && \
+    echo "}" >> /etc/nginx/nginx.conf
+
+# Открытие порта 80 для nginx
+EXPOSE 80
+
+# Запуск nginx в foreground режиме
+CMD ["nginx", "-g", "daemon off;"]
