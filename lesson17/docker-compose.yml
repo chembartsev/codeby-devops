@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpresspassword
+    volumes:
+      - wp-db:/var/lib/mysql
+    networks:
+      - wp-net
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uwordpress", "-pwordpresspassword"]
+      timeout: 30s
+      retries: 10
+      interval: 10s
+      start_period: 40s
+
+  wordpress:
+    image: wordpress:latest
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpresspassword
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - wp-data:/var/www/html
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - wp-net
+    restart: always
+
+networks:
+  wp-net:
+    driver: bridge
+
+volumes:
+  wp-db:
+  wp-data:
