@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpresspassword
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - backend-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-prootpassword"]
+      interval: 10s
+      timeout: 30s
+      retries: 5
+
+  app:
+    image: wordpress:latest
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpresspassword
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_CONFIG_EXTRA: |
+        define('WP_HOME', 'http://localhost:81');
+        define('WP_SITEURL', 'http://localhost:81');
+        define('FORCE_SSL_ADMIN', false);
+    volumes:
+      - wordpress-data:/var/www/html
+    networks:
+      - backend-network
+    depends_on:
+      db:
+        condition: service_healthy
+
+  proxy:
+    image: nginx:alpine
+    ports:
+      - "81:80"
+    volumes:
+      - /home/testdocker/lesson18/nginx-conf:/etc/nginx/conf.d:ro
+      - wordpress-data:/var/www/html:ro
+    networks:
+      - frontend-network
+      - backend-network
+    depends_on:
+      - app
+
+networks:
+  frontend-network:
+    driver: bridge
+  backend-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+  wordpress-data:
