@@ -1,0 +1,162 @@
+Script started on 2025-09-17 19:29:29+00:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="79" LINES="24"]
+[?2004h]0;testdocker@testdocker: ~/wordpress-k8stest[01;32mtestdocker@testdocker[00m:[01;34m~/wordpress-k8stest[00m$ [7mkubectl get deployment wordpress -n [27m[7md[27m[7mev[27m[A]0;testdocker@testdocker: ~/wordpress-k8stest[01;32mtestdocker@testdocker[00m:[01;34m~/wordpress-k8stest[00m$ kubectl get deployment wordpress -n dev
+[?2004lNAME        READY   UP-TO-DATE   AVAILABLE   AGE
+wordpress   1/1     1            1           6h1m
+[?2004h]0;testdocker@testdocker: ~/wordpress-k8stest[01;32mtestdocker@testdocker[00m:[01;34m~/wordpress-k8stest[00m$ [7mkubectl scale deployment wordpress -[27m[7mn[27m[7m dev --replicas=3[27m[A]0;testdocker@testdocker: ~/wordpress-k8stest[01;32mtestdocker@testdocker[00m:[01;34m~/wordpress-k8stest[00m$ kubectl scale deployment wordpress -n dev --replicas=3
+[?2004ldeployment.apps/wordpress scaled
+[?2004h]0;testdocker@testdocker: ~/wordpress-k8stest[01;32mtestdocker@testdocker[00m:[01;34m~/wordpress-k8stest[00m$ [7mkubectl get pods -n dev -l app=wordp[27m[7mr[27m[7mess -w[27m[A]0;testdocker@testdocker: ~/wordpress-k8stest[01;32mtestdocker@testdocker[00m:[01;34m~/wordpress-k8stest[00m$ kubectl get pods -n dev -l app=wordpress -w
+[?2004lNAME                         READY   STATUS    RESTARTS   AGE
+wordpress-547799fdf6-4mp6d   1/1     Running   0          39m
+wordpress-547799fdf6-4wvr2   1/1     Running   0          10s
+wordpress-547799fdf6-c5dcv   1/1     Running   0          10s
+^C[?2004h]0;testdocker@testdocker: ~/wordpress-k8stest[01;32mtestdocker@testdocker[00m:[01;34m~/wordpress-k8stest[00m$ [7mab -n 5000 -c 30 "http://172.18.0.3:[27m[7m3[27m[7m0080/"[27m[A]0;testdocker@testdocker: ~/wordpress-k8stest[01;32mtestdocker@testdocker[00m:[01;34m~/wordpress-k8stest[00m$ ab -n 5000 -c 30 "http://172.18.0.3:30080/"
+[?2004lThis is ApacheBench, Version 2.3 <$Revision: 1903618 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking 172.18.0.3 (be patient)
+Completed 500 requests
+Completed 1000 requests
+Completed 1500 requests
+Completed 2000 requests
+Completed 2500 requests
+Completed 3000 requests
+Completed 3500 requests
+Completed 4000 requests
+Completed 4500 requests
+Completed 5000 requests
+Finished 5000 requests
+
+
+Server Software:        Apache/2.4.65
+Server Hostname:        172.18.0.3
+Server Port:            30080
+
+Document Path:          /
+Document Length:        0 bytes
+
+Concurrency Level:      30
+Time taken for tests:   15.747 seconds
+Complete requests:      5000
+Failed requests:        0
+Non-2xx responses:      5000
+Total transferred:      1945000 bytes
+HTML transferred:       0 bytes
+Requests per second:    317.51 [#/sec] (mean)
+Time per request:       94.484 [ms] (mean)
+Time per request:       3.149 [ms] (mean, across all concurrent requests)
+Transfer rate:          120.62 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.2      0       6
+Processing:     4   94  47.1     88     520
+Waiting:        3   93  47.0     87     520
+Total:          4   94  47.2     88     523
+
+Percentage of the requests served within a certain time (ms)
+  50%     88
+  66%    102
+  75%    113
+  80%    120
+  90%    140
+  95%    159
+  98%    194
+  99%    253
+ 100%    523 (longest request)
+[?2004h]0;testdocker@testdocker: ~/wordpress-k8stest[01;32mtestdocker@testdocker[00m:[01;34m~/wordpress-k8stest[00m$ [7mkubectl scale deployment wordpress -[27m[7mn[27m[7m dev --replicas=1[27m[A]0;testdocker@testdocker: ~/wordpress-k8stest[01;32mtestdocker@testdocker[00m:[01;34m~/wordpress-k8stest[00m$ kubectl scale deployment wordpress -n dev --replicas=1
+[?2004ldeployment.apps/wordpress scaled
+[?2004h]0;testdocker@testdocker: ~/wordpress-k8stest[01;32mtestdocker@testdocker[00m:[01;34m~/wordpress-k8stest[00m$ [7mkubectl describe hpa wordpress-hpa -[27m[7mn[27m[7m dev[27m[A]0;testdocker@testdocker: ~/wordpress-k8stest[01;32mtestdocker@testdocker[00m:[01;34m~/wordpress-k8stest[00m$ kubectl describe hpa wordpress-hpa -n dev
+[?2004lName:                                                  wordpress-hpa
+Namespace:                                             dev
+Labels:                                                <none>
+Annotations:                                           <none>
+CreationTimestamp:                                     Wed, 17 Sep 2025 18:22:40 +0000
+Reference:                                             Deployment/wordpress
+Metrics:                                               ( current / target )
+  resource cpu on pods  (as a percentage of request):  <unknown> / 50%
+Min replicas:                                          1
+Max replicas:                                          5
+Deployment pods:                                       1 current / 0 desired
+Conditions:
+  Type           Status  Reason                   Message
+  ----           ------  ------                   -------
+  AbleToScale    True    SucceededGetScale        the HPA controller was able to get the target's current scale
+  ScalingActive  False   FailedGetResourceMetric  the HPA was unable to compute the replica count: failed to get cpu utilization: unable to get metrics for resource cpu: unable to fetch metrics from resource metrics API: the server is currently unable to handle the request (get pods.metrics.k8s.io)
+Events:
+  Type     Reason                   Age                    From                       Message
+  ----     ------                   ----                   ----                       -------
+  Warning  FailedGetResourceMetric  2m58s (x257 over 67m)  horizontal-pod-autoscaler  failed to get cpu utilization: unable to get metrics for resource cpu: unable to fetch metrics from resource metrics API: the server is currently unable to handle the request (get pods.metrics.k8s.io)
+[?2004h]0;testdocker@testdocker: ~/wordpress-k8stest[01;32mtestdocker@testdocker[00m:[01;34m~/wordpress-k8stest[00m$ [7mkubectl get hpa wordpress-hpa -n dev[27m[7m [27m[7m-o yaml[27m[A]0;testdocker@testdocker: ~/wordpress-k8stest[01;32mtestdocker@testdocker[00m:[01;34m~/wordpress-k8stest[00m$ kubectl get hpa wordpress-hpa -n dev -o yaml
+[?2004lapiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"autoscaling/v2","kind":"HorizontalPodAutoscaler","metadata":{"annotations":{},"name":"wordpress-hpa","namespace":"dev"},"spec":{"maxReplicas":5,"metrics":[{"resource":{"name":"cpu","target":{"averageUtilization":50,"type":"Utilization"}},"type":"Resource"}],"minReplicas":1,"scaleTargetRef":{"apiVersion":"apps/v1","kind":"Deployment","name":"wordpress"}}}
+  creationTimestamp: "2025-09-17T18:22:40Z"
+  name: wordpress-hpa
+  namespace: dev
+  resourceVersion: "28200"
+  uid: 446ccef2-768b-4b1f-bd67-0b4a55b10b4d
+spec:
+  maxReplicas: 5
+  metrics:
+  - resource:
+      name: cpu
+      target:
+        averageUtilization: 50
+        type: Utilization
+    type: Resource
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: wordpress
+status:
+  conditions:
+  - lastTransitionTime: "2025-09-17T18:22:55Z"
+    message: the HPA controller was able to get the target's current scale
+    reason: SucceededGetScale
+    status: "True"
+    type: AbleToScale
+  - lastTransitionTime: "2025-09-17T18:22:55Z"
+    message: 'the HPA was unable to compute the replica count: failed to get cpu utilization:
+      unable to get metrics for resource cpu: unable to fetch metrics from resource
+      metrics API: the server is currently unable to handle the request (get pods.metrics.k8s.io)'
+    reason: FailedGetResourceMetric
+    status: "False"
+    type: ScalingActive
+  currentMetrics:
+  - type: ""
+  currentReplicas: 1
+  desiredReplicas: 0
+[?2004h]0;testdocker@testdocker: ~/wordpress-k8stest[01;32mtestdocker@testdocker[00m:[01;34m~/wordpress-k8stest[00m$ [7mkubectl get all -n dev[27mkubectl get all -n dev
+[?2004lNAME                             READY   STATUS    RESTARTS      AGE
+pod/mysql-0                      1/1     Running   1 (94m ago)   5h41m
+pod/wordpress-547799fdf6-4mp6d   1/1     Running   0             41m
+
+NAME                TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
+service/mysql       ClusterIP   None           <none>        3306/TCP       6h2m
+service/wordpress   NodePort    10.96.108.87   <none>        80:30080/TCP   6h2m
+
+NAME                        READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/wordpress   1/1     1            1           6h2m
+
+NAME                                   DESIRED   CURRENT   READY   AGE
+replicaset.apps/wordpress-547799fdf6   1         1         1       41m
+replicaset.apps/wordpress-54c6bd84bc   0         0         0       69m
+replicaset.apps/wordpress-599db8445d   0         0         0       45m
+replicaset.apps/wordpress-5d6647f6cc   0         0         0       4h36m
+replicaset.apps/wordpress-77f89d6f6d   0         0         0       6h2m
+replicaset.apps/wordpress-79466cf588   0         0         0       4h42m
+
+NAME                     READY   AGE
+statefulset.apps/mysql   1/1     6h2m
+
+NAME                                                REFERENCE              TARGETS              MINPODS   MAXPODS   REPLICAS   AGE
+horizontalpodautoscaler.autoscaling/wordpress-hpa   Deployment/wordpress   cpu: <unknown>/50%   1         5         1          68m
+[?2004h]0;testdocker@testdocker: ~/wordpress-k8stest[01;32mtestdocker@testdocker[00m:[01;34m~/wordpress-k8stest[00m$ exit
+[?2004lexit
+
+Script done on 2025-09-17 19:31:29+00:00 [COMMAND_EXIT_CODE="0"]
