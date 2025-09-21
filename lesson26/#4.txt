@@ -1,0 +1,104 @@
+Started by user admin
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/my-apps-parallel
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Create Apps Structure)
+[Pipeline] sh
++ echo 📁 Creating application folders...
+📁 Creating application folders...
++ mkdir -p hello-world hello-jenkins hello-devops
++ echo Hello World Application
++ echo Hello Jenkins Application
++ echo Hello Devops Application
++ echo ✅ Folder structure created:
+✅ Folder structure created:
++ ls -la
+total 20
+drwxr-xr-x 5 jenkins jenkins 4096 Sep 21 17:36 .
+drwxr-xr-x 4 jenkins jenkins 4096 Sep 21 17:32 ..
+drwxr-xr-x 2 jenkins jenkins 4096 Sep 21 17:36 hello-devops
+drwxr-xr-x 2 jenkins jenkins 4096 Sep 21 17:36 hello-jenkins
+drwxr-xr-x 2 jenkins jenkins 4096 Sep 21 17:36 hello-world
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Run Parallel Apps)
+[Pipeline] script
+[Pipeline] {
+[Pipeline] parallel
+[Pipeline] { (Branch: hello-world)
+[Pipeline] { (Branch: hello-jenkins)
+[Pipeline] { (Branch: hello-devops)
+[Pipeline] sh
+[Pipeline] sh
+[Pipeline] sh
++ echo Processing Hello World...
+Processing Hello World...
++ echo Build: ✓
++ echo Test: ✓
++ echo Deploy: ✓
+[Pipeline] }
++ echo Processing Hello Jenkins...
+Processing Hello Jenkins...
++ echo Build: ✓
++ echo Test: ✓
++ echo Deploy: ✓
+[Pipeline] }
++ echo Processing Hello Devops...
+Processing Hello Devops...
++ echo Build: ✓
++ echo Test: ✓
++ echo Deploy: ✓
+[Pipeline] }
+[Pipeline] // parallel
+[Pipeline] }
+[Pipeline] // script
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Show Results)
+[Pipeline] sh
++ echo 🎉 All applications completed!
+🎉 All applications completed!
++ echo 
+
++ echo 📊 Results:
+📊 Results:
++ echo ===========
+===========
++ echo Hello World:
+Hello World:
++ cat hello-world/build.log hello-world/deploy.log hello-world/test.log
+Build: ✓
+Deploy: ✓
+Test: ✓
++ echo 
+
++ echo Hello Jenkins:
+Hello Jenkins:
++ cat hello-jenkins/build.log hello-jenkins/deploy.log hello-jenkins/test.log
+Build: ✓
+Deploy: ✓
+Test: ✓
++ echo 
+
++ echo Hello Devops:
+Hello Devops:
++ cat hello-devops/build.log hello-devops/deploy.log hello-devops/test.log
+Build: ✓
+Deploy: ✓
+Test: ✓
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] echo
+🚀 Pipeline finished!
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
