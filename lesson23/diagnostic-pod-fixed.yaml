@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: diagnostic-tool
+  namespace: dev
+spec:
+  serviceAccountName: diagnostic-sa
+  containers:
+  - name: diagnostic
+    image: bitnami/kubectl:latest
+    command: ["/bin/sh", "-c"]
+    args:
+    - |
+      echo "Начинаю поиск подов Wordpress в namespace dev..."
+      sleep 10
+      
+      echo "Проверяем доступность Kubernetes API..."
+      if kubectl cluster-info; then
+        echo "API доступен"
+        
+        pods=$(kubectl get pods -n dev -l app=wordpress -o jsonpath='{.items[*].metadata.name}' --request-timeout=30s)
+        if [ -z "$pods" ]; then
+          echo "Поды Wordpress не найдены"
+          echo "Все поды в namespace dev:"
+          kubectl get pods -n dev --request-timeout=30s
+        else
+          echo "Обнаружены следующие поды Wordpress:"
+          for pod in $pods; do
+            echo "- $pod"
+            status=$(kubectl get pod $pod -n dev -o jsonpath='{.status.phase}' --request-timeout=30s)
+            echo "  Статус: $status"
+          done
+        fi
+      else
+        echo "Ошибка: Не удалось подключиться к Kubernetes API"
+        echo "Проверяем service account..."
+        cat /var/run/secrets/kubernetes.io/serviceaccount/token
+        echo ""
+        echo "Проверяем namespace..."
+        cat /var/run/secrets/kubernetes.io/serviceaccount/namespace
+      fi
+      echo "Диагностика завершена"
+      sleep 3600
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "50m"
+      limits:
+        memory: "128Mi"
+        cpu: "100m"
+  restartPolicy: OnFailure
