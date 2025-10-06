@@ -1,0 +1,37 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/focal64"
+
+  # Общие настройки для всех машин
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "2048"
+    vb.cpus = 2
+    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
+  end
+
+  # Настройка сервера
+  config.vm.define "server" do |server|
+    server.vm.network "public_network", bridge: "Ethernet 2",
+      use_dhcp_assigned_default_gateway: true
+    server.vm.hostname = "server"
+    server.vm.provision "shell", path: "server.sh"
+    server.vm.synced_folder ".", "/vagrant", type: "rsync"
+  end
+
+  # Настройка клиента
+  config.vm.define "client" do |client|
+    client.vm.network "public_network", bridge: "Ethernet 2",
+      use_dhcp_assigned_default_gateway: true
+    client.vm.hostname = "client"
+    client.vm.provision "shell", path: "client.sh"
+    client.vm.synced_folder ".", "/vagrant", type: "rsync"
+  end
+
+  # Дополнительные настройки безопасности
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+  config.ssh.forward_agent = true
+  config.ssh.insert_key = false
+end
